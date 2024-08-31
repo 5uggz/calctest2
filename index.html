@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .calculator {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .calculator h1 {
+            margin: 0 0 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-group button {
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .input-group button:hover {
+            background-color: #c82333;
+        }
+        .operation {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .operation select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .calculator button.calculate {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .calculator button.calculate:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Calculator</h1>
+        <div id="inputs-container">
+            <!-- Input fields will be added here dynamically -->
+        </div>
+        <button onclick="addInput()">Add Number</button>
+        
+        <div class="operation">
+            <label for="operation">Select operation:</label>
+            <select id="operation">
+                <option value="add">Add</option>
+                <option value="subtract">Subtract</option>
+                <option value="multiply">Multiply</option>
+                <option value="divide">Divide</option>
+            </select>
+        </div>
+        
+        <button class="calculate" onclick="calculate()">Calculate</button>
+        
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // Initialize with one input field
+        addInput();
+
+        function addInput() {
+            const container = document.getElementById("inputs-container");
+
+            // Create a new input group
+            const inputGroup = document.createElement("div");
+            inputGroup.className = "input-group";
+
+            // Create the input field
+            const input = document.createElement("input");
+            input.type = "text";
+            input.placeholder = "Enter a number";
+
+            // Create the remove button
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.onclick = () => {
+                container.removeChild(inputGroup);
+            };
+
+            // Append input and button to the input group
+            inputGroup.appendChild(input);
+            inputGroup.appendChild(removeButton);
+
+            // Append input group to the container
+            container.appendChild(inputGroup);
+        }
+
+        function calculate() {
+            const inputs = document.querySelectorAll("#inputs-container input");
+            const operation = document.getElementById("operation").value;
+            const resultElement = document.getElementById("result");
+
+            // Get numbers from the input fields
+            const numbers = Array.from(inputs).map(input => parseFloat(input.value.trim()));
+
+            // Check for valid numbers
+            if (numbers.some(isNaN)) {
+                resultElement.innerHTML = "Please enter valid numbers.";
+                return;
+            }
+
+            // Perform the selected operation
+            let result;
+            switch (operation) {
+                case 'add':
+                    result = numbers.reduce((acc, num) => acc + num, 0);
+                    break;
+                case 'subtract':
+                    result = numbers.reduce((acc, num) => acc - num);
+                    break;
+                case 'multiply':
+                    result = numbers.reduce((acc, num) => acc * num, 1);
+                    break;
+                case 'divide':
+                    result = numbers.reduce((acc, num) => acc / num);
+                    break;
+                default:
+                    resultElement.innerHTML = "Unknown operation.";
+                    return;
+            }
+
+            // Display the result
+            resultElement.innerHTML = `Result: ${result}`;
+        }
+    </script>
+</body>
+</html>
